@@ -8,9 +8,13 @@ async function retrieveMovie(req: Request, res: Response) {
             message: messages.missing_query,
             missing: ["movie_id"],
         });
+        return;
     }
 
-    const movieData = TmdbRetriever.retrieveMovieFromTmdb(Number(movieId));
+    const movieData = await TmdbRetriever.retrieveMovieFromTmdb(
+        Number(movieId)
+    );
+    res.status(200).send(movieData);
 }
 
 export default retrieveMovie;
