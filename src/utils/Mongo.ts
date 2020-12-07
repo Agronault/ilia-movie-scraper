@@ -3,9 +3,31 @@ const mongoose = require("mongoose");
 import MovieModel from "../models/movieModel";
 import Movie from "../types/Movie";
 
+const {
+    MONGO_USERNAME,
+    MONGO_PASSWORD,
+    MONGO_HOSTNAME,
+    MONGO_PORT,
+    MONGO_DB,
+} = process.env;
+
 export default class Mongo {
     static connect() {
-        mongoose.connect("mongodb://localhost/ilia");
+        if (process.env.NODE_ENV === "docker") {
+            mongoose
+                .connect(
+                    `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`,
+                    { useNewUrlParser: true }
+                )
+                .then(() => {
+                    console.log("MongoDB connected");
+                })
+                .catch((err: any) => {
+                    console.log(err);
+                });
+        } else {
+            mongoose.connect("mongodb://localhost/ilia");
+        }
 
         return mongoose;
     }
