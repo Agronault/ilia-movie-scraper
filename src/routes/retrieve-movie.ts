@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 
 import messages from "../utils/messages";
+import Mongo from "../utils/Mongo";
 import Parsing from "../utils/Parsing";
 import TmdbRetriever from "../utils/TmdbRetriever";
 
@@ -25,7 +26,9 @@ async function retrieveMovie(req: Request, res: Response) {
         );
         const movie = Parsing.parseRawDataToMovie(movieRawData);
 
-        res.status(200).send(movie);
+        await Mongo.saveMovie(movie);
+
+        res.status(200).send({ message: messages.success, data: movie });
     } catch (err) {
         res.status(500).send(err);
     }
