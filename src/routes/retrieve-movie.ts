@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 
+import messages from "../utils/messages";
 import Parsing from "../utils/Parsing";
 import TmdbRetriever from "../utils/TmdbRetriever";
 
