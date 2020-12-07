@@ -12,6 +12,11 @@ async function retrieveMovie(req: Request, res: Response) {
             missing: ["movie_id"],
         });
         return;
+    } else if (Number(req.query.movie_id) <= 0) {
+        res.status(404).send({
+            message: messages.movie_id_out_of_range,
+        });
+        return;
     }
 
     const movieRawData = await TmdbRetriever.retrieveMovieFromTmdb(
