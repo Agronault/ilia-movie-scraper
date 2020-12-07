@@ -1,4 +1,6 @@
 import { Request, Response } from "express";
+
+import Parsing from "../utils/Parsing";
 import TmdbRetriever from "../utils/TmdbRetriever";
 
 async function retrieveMovie(req: Request, res: Response) {
@@ -11,10 +13,13 @@ async function retrieveMovie(req: Request, res: Response) {
         return;
     }
 
-    const movieData = await TmdbRetriever.retrieveMovieFromTmdb(
+    const movieRawData = await TmdbRetriever.retrieveMovieFromTmdb(
         Number(movieId)
     );
-    res.status(200).send(movieData);
+
+    const movie = Parsing.parseRawDataToMovie(movieRawData);
+
+    res.status(200).send(movie);
 }
 
 export default retrieveMovie;

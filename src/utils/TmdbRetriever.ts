@@ -1,9 +1,12 @@
 import Axios from "axios";
-import tmdbKey from "../keys/tmdbKey";
 
-interface RawData {
-    movieRawData: any;
-    movieRawTranslations: any;
+import tmdbKey from "../keys/tmdbKey";
+import MovieRawData from "../types/MovieRawData";
+import MovieRawTranslations from "../types/MovieRawTranslations";
+
+export interface RawData {
+    movieRawData: MovieRawData;
+    movieRawTranslations: MovieRawTranslations;
 }
 
 class TmdbRetriever {
