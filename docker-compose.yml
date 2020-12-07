@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+    executor:
+        image: agro/ilia-movie-scraper:latest
+        container_name: ilia_movie_scraper
+        hostname: movies
+        environment:
+            - NODE_ENV=docker
+            - MONGO_USERNAME=$MONGO_USERNAME
+            - MONGO_PASSWORD=$MONGO_PASSWORD
+            - MONGO_HOSTNAME=database
+            - MONGO_PORT=$MONGO_PORT
+            - MONGO_DB=$MONGO_DB
+        ports:
+            - "4000:4000"
+        links:
+            - database
+        networks:
+            - backend
+        depends_on:
+            - database
+        command: ./wait-for.sh db:27017 -- node ./dist/main.js
+
+    database:
+        image: mongo:latest
+        container_name: mongo_ilia
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ilia
+            MONGO_INITDB_ROOT_PASSWORD: ilia#2020challenge
+            MONGO_INITDB_DATABASE: ilia
+        volumes: 
+            - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+            - ./mongo-volume:/data/db
+        ports:
+            - "27017:27017"
+        networks:
+            - backend
+
+networks:
+  backend:
+    driver: "bridge"

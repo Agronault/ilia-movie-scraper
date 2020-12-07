@@ -30,7 +30,10 @@ async function retrieveMovie(req: Request, res: Response) {
 
         res.status(200).send({ message: messages.success, data: movie });
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send({
+            message: messages.general_error,
+            data: JSON.stringify(err),
+        });
     }
 }
 
