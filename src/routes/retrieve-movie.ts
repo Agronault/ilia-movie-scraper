@@ -19,13 +19,16 @@ async function retrieveMovie(req: Request, res: Response) {
         return;
     }
 
-    const movieRawData = await TmdbRetriever.retrieveMovieFromTmdb(
-        Number(movieId)
-    );
+    try {
+        const movieRawData = await TmdbRetriever.retrieveMovieFromTmdb(
+            Number(movieId)
+        );
+        const movie = Parsing.parseRawDataToMovie(movieRawData);
 
-    const movie = Parsing.parseRawDataToMovie(movieRawData);
-
-    res.status(200).send(movie);
+        res.status(200).send(movie);
+    } catch (err) {
+        res.status(500).send(err);
+    }
 }
 
 export default retrieveMovie;
